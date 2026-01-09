@@ -1,0 +1,8 @@
+{
+  "name": "Help - AI ",
+  "description": "An emergency safety platform that listens for voice triggers and alerts contacts without manual interaction.",
+  "requestFramePermissions": [
+    "microphone",
+    "geolocation"
+  ]
+}
