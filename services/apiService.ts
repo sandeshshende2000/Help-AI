@@ -9,7 +9,8 @@ class MockBackend {
     phone: '+91 98765 43210',
     createdAt: Date.now() - (15 * 24 * 60 * 60 * 1000),
     isVerified: false,
-    preferredLanguage: 'en-US',
+    // Fix: Using correct SupportedLanguage value 'en' instead of 'en-US'
+    preferredLanguage: 'en',
     subscription: {
       tier: SubscriptionTier.FREE,
       expiresAt: 0,

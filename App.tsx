@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { GoogleGenAI, Type } from "@google/genai";
 import { PhoneFrame } from './components/PhoneFrame';
@@ -45,7 +44,7 @@ const GooglePlayBilling: React.FC<{
   const [expiry, setExpiry] = useState('');
   const [cvv, setCvv] = useState('');
 
-  const price = tier === SubscriptionTier.MONTHLY ? '₹199.00' : '₹499.00';
+  const price = tier === SubscriptionTier.MONTHLY ? '₹99.00' : '₹499.00';
   const planName = tier === SubscriptionTier.MONTHLY ? 'Monthly Guardian' : 'Annual Shield';
 
   const isCardValid = useMemo(() => {
@@ -82,11 +81,11 @@ const GooglePlayBilling: React.FC<{
 
   return (
     <div className="absolute inset-0 z-[100] flex items-end justify-center bg-black/80 p-0 animate-in fade-in duration-300">
-      <div className="w-full bg-slate-900 rounded-t-[2.5rem] border-t border-slate-700 p-6 pb-10 animate-in slide-in-from-bottom duration-300 max-h-[90%] overflow-y-auto text-white text-left">
+      <div className="w-full bg-slate-900 rounded-t-[2.5rem] border-t border-slate-700 p-6 pb-10 animate-in slide-in-from-bottom duration-300 max-h-[90%] overflow-y-auto text-white text-left text-left">
         <div className="w-12 h-1 bg-slate-700 rounded-full mx-auto mb-6" />
         
         {step === 'info' && (
-          <div className="space-y-5 text-left">
+          <div className="space-y-5 text-left text-left">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center">
@@ -109,7 +108,7 @@ const GooglePlayBilling: React.FC<{
               </button>
             </div>
 
-            <div className="bg-slate-800/50 p-3 rounded-xl border border-slate-700 text-left">
+            <div className="bg-slate-800/50 p-3 rounded-xl border border-slate-700 text-left text-left">
               <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Purchasing</p>
               <p className="text-sm font-bold text-white">{planName}</p>
             </div>
@@ -168,24 +167,24 @@ const GooglePlayBilling: React.FC<{
         {step === 'processing' && (
           <div className="py-20 flex flex-col items-center justify-center space-y-4 text-center">
             <RefreshCcw className="w-12 h-12 text-blue-500 animate-spin" />
-            <p className="text-sm font-black text-white tracking-tight">Verifying Payment Status...</p>
+            <p className="text-sm font-black text-white tracking-tight text-center">Verifying Payment Status...</p>
             <p className="text-[9px] text-slate-500 animate-pulse uppercase tracking-widest">Encrypting Bank Handshake</p>
           </div>
         )}
 
         {step === 'result' && (
-          <div className="py-8 flex flex-col items-center justify-center space-y-5 text-center">
+          <div className="py-8 flex flex-col items-center justify-center space-y-5 text-center text-center">
             {status === 'PURCHASED' ? (
               <>
                 <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center border border-green-500/20">
                   <Check className="w-8 h-8 text-green-500" />
                 </div>
                 <div className="text-center">
-                  <h3 className="text-xl font-black text-white">Payment Successful</h3>
-                  <p className="text-xs text-slate-400 mt-2 px-8 leading-relaxed">Your account has been upgraded. Protection is now active.</p>
+                  <h3 className="text-xl font-black text-white text-center">Payment Successful</h3>
+                  <p className="text-xs text-slate-400 mt-2 px-8 leading-relaxed text-center">Your account has been upgraded. Protection is now active.</p>
                   <div className="mt-8 flex flex-col items-center gap-2">
                     <RefreshCcw className="w-4 h-4 text-green-500 animate-spin" />
-                    <p className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Syncing status... redirecting</p>
+                    <p className="text-[9px] text-slate-500 uppercase font-black tracking-widest text-center">Syncing status... redirecting</p>
                   </div>
                 </div>
               </>
@@ -194,8 +193,8 @@ const GooglePlayBilling: React.FC<{
                 <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center border border-red-500/20">
                   <X className="w-8 h-8 text-red-500" />
                 </div>
-                <h3 className="text-xl font-black text-white text-center">Payment Failed</h3>
-                <p className="text-xs text-slate-400 mt-2 px-8 text-center">Transaction was declined by the bank.</p>
+                <h3 className="text-xl font-black text-white text-center text-center">Payment Failed</h3>
+                <p className="text-xs text-slate-400 mt-2 px-8 text-center text-center">Transaction was declined by the bank.</p>
                 <button onClick={onClose} className="w-full bg-slate-800 text-white font-black py-4 rounded-2xl mt-4">BACK TO PLANS</button>
               </>
             )}
@@ -249,7 +248,7 @@ const App: React.FC = () => {
   }, [user, currentTime, sponsoredArea]);
 
   const currentPhrases = useMemo(() => {
-    if (!user) return TRIGGER_PHRASES['en-US'];
+    if (!user) return TRIGGER_PHRASES['en'];
     return TRIGGER_PHRASES[user.preferredLanguage];
   }, [user]);
 
@@ -424,14 +423,13 @@ const App: React.FC = () => {
       voiceService.stop(); 
       setIsListening(false); 
     } else {
-      voiceService.start(user?.preferredLanguage || 'en-US', handleTrigger, s => setIsListening(s === 'listening'));
+      voiceService.start(user?.preferredLanguage || 'en', handleTrigger, s => setIsListening(s === 'listening'));
     }
   };
 
   const handleUpdateSpecial = () => {
     backend.updateSpecialContacts(newPolice, newAmbulance).then(updated => {
       setUser(updated);
-      alert("Optional contacts updated.");
     });
   };
 
@@ -460,7 +458,7 @@ const App: React.FC = () => {
   if (isAuthenticated === null) return null;
 
   return (
-    <div className="min-h-screen p-4 flex items-center justify-center bg-slate-950 text-left">
+    <div className="min-h-screen p-4 flex items-center justify-center bg-slate-950 text-left text-left">
       <div className="w-full max-w-[400px]">
         <PhoneFrame>
           <div className={`${sponsoredArea ? 'bg-blue-600/90' : 'bg-green-600/90'} text-white text-[10px] py-1.5 px-3 flex items-center justify-center gap-2 font-black tracking-widest uppercase z-50`}>
@@ -469,11 +467,11 @@ const App: React.FC = () => {
           </div>
 
           {!isAuthenticated ? (
-            <div className="flex-1 flex flex-col p-8 bg-slate-900 text-left">
-              <div className="mt-8 mb-10 text-center text-left">
+            <div className="flex-1 flex flex-col p-8 bg-slate-900 text-left text-left">
+              <div className="mt-8 mb-10 text-center text-left text-left">
                 <div className="w-16 h-16 bg-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4"><Shield className="w-10 h-10 text-white" /></div>
-                <h2 className="text-2xl font-black text-white text-center">Help</h2>
-                <p className="text-slate-400 text-xs mt-2 text-center">AI Zero-Touch Emergency Platform</p>
+                <h2 className="text-2xl font-black text-white text-center text-center">Help</h2>
+                <p className="text-slate-400 text-xs mt-2 text-center text-center">AI Zero-Touch Emergency Platform</p>
               </div>
               <form onSubmit={handleSignIn} className="space-y-4">
                 <input type="email" required value={authEmail} onChange={e => setAuthEmail(e.target.value)} placeholder="Email" className="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white outline-none focus:border-blue-500" />
@@ -482,10 +480,10 @@ const App: React.FC = () => {
               </form>
             </div>
           ) : !isVerified ? (
-            <div className="flex-1 flex flex-col p-8 bg-slate-900 text-center justify-center">
+            <div className="flex-1 flex flex-col p-8 bg-slate-900 text-center text-center justify-center">
               <div className="w-20 h-20 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-500"><MailCheck className="w-10 h-10 animate-pulse" /></div>
-              <h2 className="text-xl font-bold text-white">Verify Identity</h2>
-              <p className="text-slate-400 text-xs mt-3 mb-8">Link sent to {user?.email}</p>
+              <h2 className="text-xl font-bold text-white text-center text-center">Verify Identity</h2>
+              <p className="text-slate-400 text-xs mt-3 mb-8 text-center text-center">Link sent to {user?.email}</p>
               <button onClick={handleVerify} className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition">Simulate Verification</button>
             </div>
           ) : (
@@ -496,30 +494,30 @@ const App: React.FC = () => {
                 <div className={`absolute top-12 left-4 right-4 p-4 rounded-xl shadow-2xl z-[60] border-2 border-white/20 animate-in slide-in-from-top ${aiAnalysisResult?.includes("Verified") || isCalling ? 'bg-red-600' : 'bg-slate-700'}`}>
                   <div className="flex items-center gap-3">
                     <div className="bg-white rounded-full p-1 animate-pulse"><Bell className="w-5 h-5 text-red-600" /></div>
-                    <div className="text-xs flex-1">
-                      <p className="font-black text-white uppercase">Triggered</p>
-                      <p className="text-white/80 font-bold truncate">{aiAnalysisResult || "Evaluating..."}</p>
+                    <div className="text-xs flex-1 text-left text-left text-left text-left">
+                      <p className="font-black text-white uppercase text-left">Triggered</p>
+                      <p className="text-white/80 font-bold truncate text-left">{aiAnalysisResult || "Evaluating..."}</p>
                     </div>
                     <button onClick={() => setLastTriggered(null)} className="bg-white/20 p-2 rounded-lg text-[10px] font-bold text-white">STOP</button>
                   </div>
                 </div>
               )}
               
-              <div className="p-5 pb-2 flex justify-between items-center text-white text-left">
-                <div className="text-left">
+              <div className="p-5 pb-2 flex justify-between items-center text-white text-left text-left text-left">
+                <div className="text-left text-left text-left">
                   <h2 className="text-xl font-black tracking-tighter flex items-center gap-2"><Shield className="w-5 h-5 text-red-500" /> Help</h2>
                   <div className="text-[10px] text-slate-500 font-mono flex items-center gap-1 mt-0.5"><Clock className="w-3 h-3" /> {currentTime.toLocaleTimeString()}</div>
                 </div>
                 <div className={`px-2 py-0.5 rounded text-[8px] font-black uppercase ${isListening ? 'bg-green-500/10 text-green-500' : 'bg-slate-700 text-slate-500'}`}>{isListening ? 'Active' : 'Standby'}</div>
               </div>
 
-              <div className="flex-1 overflow-y-auto px-5 pb-20 text-white text-left">
+              <div className="flex-1 overflow-y-auto px-5 pb-20 text-white text-left text-left text-left">
                 {activeTab === 'monitor' && (
-                  <div className="space-y-6 mt-4 text-left">
+                  <div className="space-y-6 mt-4 text-left text-left text-left text-left text-left">
                     {sponsoredArea && (
-                      <div className="bg-blue-600/10 border border-blue-500/30 p-3 rounded-2xl flex items-center gap-3 animate-in fade-in slide-in-from-left-2 text-left">
+                      <div className="bg-blue-600/10 border border-blue-500/30 p-3 rounded-2xl flex items-center gap-3 animate-in fade-in slide-in-from-left-2 text-left text-left text-left">
                         <MapPin className="w-5 h-5 text-blue-400 shrink-0" />
-                        <div className="text-left">
+                        <div className="text-left text-left text-left">
                           <p className="text-[10px] font-black uppercase text-blue-400">Sponsored Area Active</p>
                           <p className="text-[11px] font-bold text-white">{sponsoredArea}</p>
                         </div>
@@ -527,17 +525,17 @@ const App: React.FC = () => {
                     )}
 
                     {contacts.length === 0 && (
-                      <div className="bg-amber-900/20 border border-amber-500/30 p-3 rounded-2xl flex items-center gap-3 animate-in pulse duration-1000 text-left">
+                      <div className="bg-amber-900/20 border border-amber-500/30 p-3 rounded-2xl flex items-center gap-3 animate-in pulse duration-1000 text-left text-left text-left">
                         <Info className="w-5 h-5 text-amber-400 shrink-0" />
-                        <div className="text-left">
+                        <div className="text-left text-left text-left">
                           <p className="text-[10px] font-black uppercase text-amber-400">Setup Required</p>
                           <p className="text-[11px] font-bold text-white">Add 1 contact to activate protection</p>
                         </div>
                       </div>
                     )}
 
-                    <div className="bg-slate-800/80 p-3 rounded-2xl border border-slate-700/50 flex items-center justify-between gap-3 group text-left">
-                       <div className="flex items-center gap-2 text-left">
+                    <div className="bg-slate-800/80 p-3 rounded-2xl border border-slate-700/50 flex items-center justify-between gap-3 group text-left text-left text-left">
+                       <div className="flex items-center gap-2 text-left text-left text-left">
                          <Languages className="w-4 h-4 text-blue-400" />
                          <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Listening Language</span>
                        </div>
@@ -547,24 +545,24 @@ const App: React.FC = () => {
                           className="bg-slate-900 text-white text-[10px] font-bold py-1 px-2 rounded-lg outline-none border border-slate-700 focus:border-blue-500 transition-all cursor-pointer"
                         >
                           {Object.entries(LANGUAGE_LABELS).map(([code, label]) => (
-                            <option key={code} value={code}>{label}</option>
+                            <option key={code} value={code as SupportedLanguage}>{label}</option>
                           ))}
                         </select>
                     </div>
 
                     {hasExpired && !sponsoredArea ? (
-                      <div className="bg-red-950/40 border border-red-500/40 p-6 rounded-3xl text-center text-left">
+                      <div className="bg-red-950/40 border border-red-500/40 p-6 rounded-3xl text-center text-left text-left text-left">
                         <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-3" />
                         <h3 className="font-bold text-red-400 text-center">Protection Disabled</h3>
                         <p className="text-[10px] text-slate-400 mt-2 text-center">Renew to enable zero-touch monitoring.</p>
                         <button onClick={() => setActiveTab('sub')} className="w-full bg-red-600 text-white py-3 rounded-2xl font-bold text-sm mt-6 hover:bg-red-700 transition shadow-lg shadow-red-950/50">Renew Now</button>
                       </div>
                     ) : (!isSubscriptionActive && !user?.subscription.hasUsedTrial && !sponsoredArea) ? (
-                      <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-3xl text-center text-left">
+                      <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-3xl text-center text-left text-left text-left">
                         <ShieldCheck className="w-12 h-12 text-blue-400 mx-auto mb-3" />
                         <h3 className="font-bold text-center">Welcome, {user?.name.split(' ')[0]}</h3>
                         <p className="text-[10px] text-slate-400 mt-2 text-center">Activate free trial or upgrade to start protection.</p>
-                        <button onClick={() => setActiveTab('sub')} className="w-full bg-blue-600 text-white py-3 rounded-2xl font-bold text-sm mt-6 hover:bg-blue-700 transition text-center">Select Plan</button>
+                        <button onClick={() => setActiveTab('sub')} className="w-full bg-blue-600 text-white py-3 rounded-2xl font-bold text-sm mt-6 hover:bg-blue-700 transition text-center text-center text-center">Select Plan</button>
                       </div>
                     ) : (
                       <>
@@ -581,13 +579,13 @@ const App: React.FC = () => {
                       </>
                     )}
 
-                    <div className="bg-slate-800/30 p-4 rounded-2xl border border-slate-700/50 space-y-3 text-left">
+                    <div className="bg-slate-800/30 p-4 rounded-2xl border border-slate-700/50 space-y-3 text-left text-left text-left">
                        <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2 text-left">
                          <Zap className="w-3 h-3 text-red-500" /> Current Trigger Phrases
                        </h4>
-                       <div className="space-y-2 text-left">
+                       <div className="space-y-2 text-left text-left text-left">
                          {currentPhrases.map((phrase, idx) => (
-                           <div key={idx} className="flex items-start gap-2 bg-slate-900/50 p-2 rounded-xl border border-slate-700/30 transition-colors hover:border-slate-600 text-left">
+                           <div key={idx} className="flex items-start gap-2 bg-slate-900/50 p-2 rounded-xl border border-slate-700/30 transition-colors hover:border-slate-600 text-left text-left text-left">
                              <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
                              <p className="text-[11px] font-medium text-slate-300 italic">"{phrase}"</p>
                            </div>
@@ -598,8 +596,8 @@ const App: React.FC = () => {
                 )}
 
                 {activeTab === 'contacts' && (
-                  <div className="space-y-6 mt-4 text-left">
-                    <div className="flex justify-between items-center text-left">
+                  <div className="space-y-6 mt-4 text-left text-left text-left">
+                    <div className="flex justify-between items-center text-left text-left text-left text-left text-left">
                       <h3 className="font-bold text-left">Emergency Circle</h3>
                       {contacts.length < 5 && (
                         <button onClick={() => setIsAddingContact(true)} className="p-1 bg-red-600 rounded-full">
@@ -609,13 +607,13 @@ const App: React.FC = () => {
                     </div>
                     
                     {contactWarning && (
-                      <div className="bg-red-500/10 border border-red-500/30 p-2 rounded-xl text-[10px] text-red-400 font-bold animate-bounce text-left">
+                      <div className="bg-red-500/10 border border-red-500/30 p-2 rounded-xl text-[10px] text-red-400 font-bold animate-bounce text-left text-left text-left">
                         {contactWarning}
                       </div>
                     )}
 
                     {isAddingContact && (
-                      <form onSubmit={saveNewContact} className="bg-slate-800 p-4 rounded-2xl border border-red-500/20 space-y-3 text-left">
+                      <form onSubmit={saveNewContact} className="bg-slate-800 p-4 rounded-2xl border border-red-500/20 space-y-3 text-left text-left text-left text-left text-left">
                         <input type="text" placeholder="Name" required value={newName} onChange={e => setNewName(e.target.value)} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-sm text-white outline-none" />
                         <input type="tel" placeholder="Phone" required value={newPhone} onChange={e => setNewPhone(e.target.value)} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-sm text-white outline-none" />
                         <button type="submit" className="w-full bg-red-600 text-white py-2 rounded-xl text-xs font-bold">Add Contact</button>
@@ -623,22 +621,22 @@ const App: React.FC = () => {
                     )}
                     
                     {contacts.length === 0 ? (
-                      <div className="bg-slate-800/30 p-8 rounded-3xl border border-dashed border-slate-700 text-center text-left">
+                      <div className="bg-slate-800/30 p-8 rounded-3xl border border-dashed border-slate-700 text-center text-left text-left text-left">
                         <Users className="w-12 h-12 text-slate-600 mx-auto mb-3" />
                         <p className="text-xs text-slate-500 leading-relaxed text-center">Your circle is empty.<br/>Add at least 1 contact to activate AI protection.</p>
                       </div>
                     ) : (
-                      <div className="space-y-3 text-left">
+                      <div className="space-y-3 text-left text-left text-left">
                         {contacts.map(c => (
                           <div key={c.id} className={`bg-slate-800/50 p-3 rounded-2xl flex justify-between items-center border transition-all ${c.isPrimary ? 'border-blue-500/50 shadow-lg shadow-blue-500/5' : 'border-slate-700/50'}`}>
-                            <div className="text-left flex-1">
-                              <div className="flex items-center gap-2 text-left">
+                            <div className="text-left flex-1 text-left text-left text-left">
+                              <div className="flex items-center gap-2 text-left text-left text-left">
                                 <p className="text-sm font-bold">{c.name}</p>
                                 {c.isPrimary && <Star className="w-3 h-3 fill-blue-500 text-blue-500" />}
                               </div>
                               <p className="text-[10px] text-slate-500">{c.phone}</p>
                             </div>
-                            <div className="flex items-center gap-2 text-left">
+                            <div className="flex items-center gap-2 text-left text-left text-left">
                               {!c.isPrimary && (
                                 <button 
                                   onClick={() => backend.setPrimaryContact(c.id).then(() => backend.getContacts().then(setContacts))}
@@ -657,10 +655,10 @@ const App: React.FC = () => {
                     )}
 
                     {/* Optional Contacts Section */}
-                    <div className="space-y-4 pt-4 border-t border-slate-800 text-left">
+                    <div className="space-y-4 pt-4 border-t border-slate-800 text-left text-left text-left">
                       <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Optional Public Services</h4>
-                      <div className="space-y-3 text-left">
-                        <div className="flex items-center gap-3 bg-slate-800/40 p-3 rounded-2xl border border-slate-700/30 text-left">
+                      <div className="space-y-3 text-left text-left text-left">
+                        <div className="flex items-center gap-3 bg-slate-800/40 p-3 rounded-2xl border border-slate-700/30 text-left text-left text-left text-left text-left text-left">
                           <Siren className="w-5 h-5 text-red-400" />
                           <input 
                             type="tel" 
@@ -671,7 +669,7 @@ const App: React.FC = () => {
                             className="bg-transparent text-sm text-white outline-none w-full"
                           />
                         </div>
-                        <div className="flex items-center gap-3 bg-slate-800/40 p-3 rounded-2xl border border-slate-700/30 text-left">
+                        <div className="flex items-center gap-3 bg-slate-800/40 p-3 rounded-2xl border border-slate-700/30 text-left text-left text-left text-left text-left text-left">
                           <Cross className="w-5 h-5 text-green-400" />
                           <input 
                             type="tel" 
@@ -685,9 +683,9 @@ const App: React.FC = () => {
                       </div>
                     </div>
                     
-                    <div className="pt-4 p-3 bg-slate-800/20 rounded-2xl border border-slate-700/30 text-left">
+                    <div className="pt-4 p-3 bg-slate-800/20 rounded-2xl border border-slate-700/30 text-left text-left text-left text-left text-left">
                       <p className="text-[9px] text-slate-500 uppercase font-black tracking-widest mb-1">Response Protocol</p>
-                      <ul className="text-[9px] text-slate-600 space-y-1 list-disc pl-3 text-left">
+                      <ul className="text-[9px] text-slate-600 space-y-1 list-disc pl-3 text-left text-left text-left">
                         <li>Primary contact receives a direct voice call.</li>
                         <li>Other contacts & public services get SMS alerts.</li>
                         <li>Actions only occur for contacts you explicitly add.</li>
@@ -697,19 +695,19 @@ const App: React.FC = () => {
                 )}
 
                 {activeTab === 'sub' && (
-                  <div className="space-y-5 mt-4 text-left">
-                    <div className="bg-slate-800 p-5 rounded-3xl text-center relative overflow-hidden text-left">
+                  <div className="space-y-5 mt-4 text-left text-left text-left">
+                    <div className="bg-slate-800 p-5 rounded-3xl text-center relative overflow-hidden text-left text-left text-left text-left text-left">
                       <button onClick={handleSignOut} className="absolute top-4 right-4 text-slate-500 hover:text-red-500 transition"><LogOut className="w-4 h-4" /></button>
                       <div className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-3"><User className="w-6 h-6 text-slate-400" /></div>
                       <p className="font-black text-white text-center">{user?.name}</p>
                       {sponsoredArea ? (
-                        <div className="mt-4 text-left bg-blue-600/10 p-4 rounded-2xl space-y-2 border border-blue-500/30 text-left">
+                        <div className="mt-4 text-left bg-blue-600/10 p-4 rounded-2xl space-y-2 border border-blue-500/30 text-left text-left text-left text-left text-left">
                           <p className="text-[10px] uppercase font-black tracking-widest text-blue-400 flex justify-between items-center text-left">District Program <Building className="w-3 h-3" /></p>
                           <p className="text-sm font-bold text-white text-left">Full Protection Active</p>
                           <p className="text-[9px] text-blue-300 text-left">Your safety is covered by {sponsoredArea}.</p>
                         </div>
                       ) : isSubscriptionActive ? (
-                        <div className="mt-4 text-left bg-slate-900/50 p-4 rounded-2xl space-y-2 border border-slate-700/50 text-left">
+                        <div className="mt-4 text-left bg-slate-900/50 p-4 rounded-2xl space-y-2 border border-slate-700/50 text-left text-left text-left text-left text-left">
                           <p className="text-[10px] uppercase font-black tracking-widest text-slate-500 flex justify-between items-center text-left">Active Plan <Check className="w-3 h-3 text-green-500" /></p>
                           <p className="text-sm font-bold text-blue-400 text-left">{user?.subscription.tier === SubscriptionTier.FREE ? 'Trial Shield' : user?.subscription.tier}</p>
                           <div className="pt-2 grid grid-cols-2 gap-2 text-left">
@@ -718,20 +716,20 @@ const App: React.FC = () => {
                           </div>
                         </div>
                       ) : (
-                        <button onClick={activateTrial} className="w-full bg-red-600 text-white py-3 rounded-2xl text-xs font-black mt-4 shadow-lg shadow-red-900/20 flex items-center justify-center gap-2 transition hover:bg-red-700 text-left"><Sparkles className="w-4 h-4" /> START FREE TRIAL</button>
+                        <button onClick={activateTrial} className="w-full bg-red-600 text-white py-3 rounded-2xl text-xs font-black mt-4 shadow-lg shadow-red-900/20 flex items-center justify-center gap-2 transition hover:bg-red-700 text-left text-left text-left text-left text-left text-left text-left"><Sparkles className="w-4 h-4" /> START FREE TRIAL</button>
                       )}
                     </div>
                     
                     {!sponsoredArea && (
-                      <div className="space-y-3 animate-in fade-in duration-500 text-left">
+                      <div className="space-y-3 animate-in fade-in duration-500 text-left text-left text-left">
                         <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-1 text-left">Upgrade Plans</h4>
-                        <button onClick={() => startUpgradeFlow(SubscriptionTier.MONTHLY)} className="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl text-left flex justify-between items-center hover:border-blue-500 transition text-white">
-                          <div className="text-left"><p className="font-bold text-sm">Monthly Guardian</p><p className="text-xs text-slate-500">₹199 / month</p></div>
+                        <button onClick={() => startUpgradeFlow(SubscriptionTier.MONTHLY)} className="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl text-left flex justify-between items-center hover:border-blue-500 transition text-white text-left text-left text-left">
+                          <div className="text-left text-left text-left"><p className="font-bold text-sm">Monthly Guardian</p><p className="text-xs text-slate-500">₹99 / month</p></div>
                           <ChevronRight className="w-4 h-4 text-slate-500" />
                         </button>
-                        <button onClick={() => startUpgradeFlow(SubscriptionTier.YEARLY)} className="w-full bg-slate-800 border border-blue-500/30 p-4 rounded-2xl text-left flex justify-between items-center relative overflow-hidden group text-white">
-                          <div className="absolute top-0 right-0 bg-blue-600 px-2 py-0.5 text-[8px] font-black uppercase text-left">Save 80%</div>
-                          <div className="text-left"><p className="font-bold text-sm">Annual Shield</p><p className="text-xs text-slate-500">₹499 / year</p></div>
+                        <button onClick={() => startUpgradeFlow(SubscriptionTier.YEARLY)} className="w-full bg-slate-800 border border-blue-500/30 p-4 rounded-2xl text-left flex justify-between items-center relative overflow-hidden group text-white text-left text-left text-left text-left text-left">
+                          <div className="absolute top-0 right-0 bg-blue-600 px-2 py-0.5 text-[8px] font-black uppercase text-left text-left text-left">Save 80%</div>
+                          <div className="text-left text-left text-left"><p className="font-bold text-sm">Annual Shield</p><p className="text-xs text-slate-500">₹499 / year</p></div>
                           <ChevronRight className="w-4 h-4 text-slate-500" />
                         </button>
                       </div>
@@ -740,21 +738,21 @@ const App: React.FC = () => {
                 )}
 
                 {activeTab === 'history' && (
-                  <div className="space-y-4 mt-4 text-white text-left">
-                    <h3 className="font-bold text-left">Incident Logs</h3>
-                    <div className="space-y-3 text-left">
+                  <div className="space-y-4 mt-4 text-white text-left text-left text-left">
+                    <h3 className="font-bold text-left text-left text-left text-left text-left">Incident Logs</h3>
+                    <div className="space-y-3 text-left text-left text-left">
                       {alerts.length === 0 ? <p className="text-[10px] text-slate-500 text-center py-10">No alerts triggered yet.</p> : 
                         alerts.map(a => (
-                          <div key={a.id} className="bg-slate-800/50 p-3 rounded-2xl border-l-4 border-l-red-500 border border-slate-700/50 transition-transform hover:scale-[1.02] text-left">
-                            <div className="flex justify-between items-start text-left">
+                          <div key={a.id} className="bg-slate-800/50 p-3 rounded-2xl border-l-4 border-l-red-500 border border-slate-700/50 transition-transform hover:scale-[1.02] text-left text-left text-left">
+                            <div className="flex justify-between items-start text-left text-left text-left">
                               <p className="text-xs font-bold">Trigger: "{a.triggerPhrase}"</p>
                               <span className={`text-[7px] font-black px-1.5 py-0.5 rounded uppercase tracking-tighter ${a.type === 'emergency' ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'}`}>
                                 {a.type}
                               </span>
                             </div>
-                            <p className="text-[9px] text-slate-500 mt-1 font-mono flex items-center gap-1 text-left"><Clock className="w-2.5 h-2.5" /> {new Date(a.timestamp).toLocaleString()}</p>
-                            {a.details && <p className="text-[8px] text-slate-400 mt-2 leading-relaxed text-left italic">{a.details}</p>}
-                            <div className="mt-2 text-[8px] font-black uppercase tracking-widest text-green-500 text-left">Alert Dispatched ✔</div>
+                            <p className="text-[9px] text-slate-500 mt-1 font-mono flex items-center gap-1 text-left text-left text-left text-left text-left text-left text-left"><Clock className="w-2.5 h-2.5" /> {new Date(a.timestamp).toLocaleString()}</p>
+                            {a.details && <p className="text-[8px] text-slate-400 mt-2 leading-relaxed text-left italic text-left text-left text-left text-left text-left text-left">{a.details}</p>}
+                            <div className="mt-2 text-[8px] font-black uppercase tracking-widest text-green-500 text-left text-left text-left text-left text-left text-left text-left text-left text-left">Alert Dispatched ✔</div>
                           </div>
                         ))
                       }
@@ -764,10 +762,10 @@ const App: React.FC = () => {
               </div>
 
               <div className="absolute bottom-0 left-0 right-0 h-16 bg-slate-800 border-t border-slate-700 flex justify-around items-center z-50">
-                <button onClick={() => setActiveTab('monitor')} className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'monitor' ? 'text-red-500' : 'text-slate-500'}`}><Shield className="w-5 h-5" /><span className="text-[7px] font-black uppercase tracking-tighter">Safe</span></button>
-                <button onClick={() => setActiveTab('contacts')} className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'contacts' ? 'text-red-500' : 'text-slate-500'}`}><Users className="w-5 h-5" /><span className="text-[7px] font-black uppercase tracking-tighter">Circle</span></button>
-                <button onClick={() => setActiveTab('history')} className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'history' ? 'text-red-500' : 'text-slate-500'}`}><History className="w-5 h-5" /><span className="text-[7px] font-black uppercase tracking-tighter">Logs</span></button>
-                <button onClick={() => setActiveTab('sub')} className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'sub' ? 'text-red-500' : 'text-slate-500'}`}><User className="w-5 h-5" /><span className="text-[7px] font-black uppercase tracking-tighter">Pro</span></button>
+                <button onClick={() => setActiveTab('monitor')} className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'monitor' ? 'text-red-500' : 'text-slate-500'}`}><Shield className="w-5 h-5" /><span className="text-[7px] font-black uppercase tracking-tighter text-left text-left text-left text-left text-left text-left">Safe</span></button>
+                <button onClick={() => setActiveTab('contacts')} className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'contacts' ? 'text-red-500' : 'text-slate-500'}`}><Users className="w-5 h-5" /><span className="text-[7px] font-black uppercase tracking-tighter text-left text-left text-left text-left text-left text-left">Circle</span></button>
+                <button onClick={() => setActiveTab('history')} className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'history' ? 'text-red-500' : 'text-slate-500'}`}><History className="w-5 h-5" /><span className="text-[7px] font-black uppercase tracking-tighter text-left text-left text-left text-left text-left text-left text-left">Logs</span></button>
+                <button onClick={() => setActiveTab('sub')} className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'sub' ? 'text-red-500' : 'text-slate-500'}`}><User className="w-5 h-5" /><span className="text-[7px] font-black uppercase tracking-tighter text-left text-left text-left text-left text-left text-left">Pro</span></button>
               </div>
             </>
           )}

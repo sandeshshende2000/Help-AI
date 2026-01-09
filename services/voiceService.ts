@@ -1,4 +1,3 @@
-
 import { TRIGGER_PHRASES, SupportedLanguage } from '../types';
 
 /**
@@ -10,6 +9,20 @@ import { TRIGGER_PHRASES, SupportedLanguage } from '../types';
 type OnTriggerCallback = (phrase: string) => void;
 type OnStatusChange = (status: 'listening' | 'stopped' | 'error') => void;
 
+// Mapping internal 2-letter codes to browser recognition locales
+const BROWSER_LANG_MAP: Record<SupportedLanguage, string> = {
+  'en': 'en-US',
+  'hi': 'hi-IN',
+  'bn': 'bn-IN',
+  'ta': 'ta-IN',
+  'te': 'te-IN',
+  'kn': 'kn-IN',
+  'ml': 'ml-IN',
+  'mr': 'mr-IN',
+  'gu': 'gu-IN',
+  'pa': 'pa-IN'
+};
+
 class VoiceService {
   private recognition: any = null;
   private isListening: boolean = false;
@@ -18,7 +31,7 @@ class VoiceService {
   private lastTriggerTime: number = 0;
   private COOLDOWN_MS = 10000;
   private restartTimeout: any = null;
-  private currentLanguage: SupportedLanguage = 'en-US';
+  private currentLanguage: SupportedLanguage = 'en';
 
   constructor() {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -30,7 +43,7 @@ class VoiceService {
       this.recognition.onresult = (event: any) => {
         let latestTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; ++i) {
-          latestTranscript += event.results[i][0].transcript.toLowerCase();
+          latestTranscript += event.results[i][0].transcript;
         }
         this.checkForTrigger(latestTranscript);
       };
@@ -55,12 +68,20 @@ class VoiceService {
     }
   }
 
+  private normalize(text: string): string {
+    return text
+      .toLowerCase()
+      .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "") // remove punctuation
+      .replace(/\s{2,}/g, " ") // normalize whitespace
+      .trim();
+  }
+
   private safeRestart() {
     if (this.restartTimeout) clearTimeout(this.restartTimeout);
     this.restartTimeout = setTimeout(() => {
       if (this.isListening && this.recognition) {
         try {
-          this.recognition.lang = this.currentLanguage;
+          this.recognition.lang = BROWSER_LANG_MAP[this.currentLanguage];
           this.recognition.start();
           this.onStatus?.('listening');
         } catch (e) {
@@ -74,13 +95,17 @@ class VoiceService {
     const now = Date.now();
     if (now - this.lastTriggerTime < this.COOLDOWN_MS) return;
 
+    const normalizedTranscript = this.normalize(transcript);
     const phrases = TRIGGER_PHRASES[this.currentLanguage];
+    
+    // Check ALL trigger phrases in the current language
     for (const phrase of phrases) {
-      if (transcript.includes(phrase.toLowerCase())) {
+      const normalizedPhrase = this.normalize(phrase);
+      if (normalizedTranscript.includes(normalizedPhrase)) {
         console.log(`VoiceService: Trigger detected (${this.currentLanguage})! -> "${phrase}"`);
         this.lastTriggerTime = now;
         this.onTrigger?.(phrase);
-        break;
+        break; // Match found, activate emergency flow
       }
     }
   }
@@ -96,7 +121,7 @@ class VoiceService {
     this.isListening = true;
     
     try {
-      this.recognition.lang = lang;
+      this.recognition.lang = BROWSER_LANG_MAP[lang];
       this.recognition.start();
       this.onStatus('listening');
     } catch (e) {
